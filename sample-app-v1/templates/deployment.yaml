@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helm-demo-{{ .Values.app }}-deployment
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.app }}
+      env: {{ .Values.environment }}
+  template:
+    metadata:
+      annotations:
+        # checksum/configmap: {{ printf "environments/configmap.%s.yaml" .Values.namespace | .Files.Get | sha256sum }}
+        # checksum/secrets: {{ printf "environments/secrets.%s.yaml" .Values.namespace | .Files.Get | sha256sum }}
+      labels:
+        app: {{ .Values.app }}
+        env: {{ .Values.environment }}
+    spec:
+      containers:
+        - name: python-docker
+          image: sample-app-v1/python-docker:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: helm-demo-{{ .Values.app }}-configmap
+            # - secretRef:
+            #     name: helm-multi-env-secrets

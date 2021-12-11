@@ -1,0 +1,3 @@
+app: dev-app
+namespace: dev-ns
+environment: development-env

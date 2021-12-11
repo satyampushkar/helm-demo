@@ -1,0 +1,3 @@
+app: prod-app
+namespace: prod-ns
+environment: production-env
